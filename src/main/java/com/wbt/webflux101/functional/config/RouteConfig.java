@@ -19,12 +19,18 @@ public class RouteConfig {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> serverResponse() {
+    public RouterFunction<ServerResponse> highLevelRoute() {
         return RouterFunctions.route()
-                .GET("/functional/math/square/{value}", this.requestHandler::squareRootHandler)
-                .GET("/functional/math/square/{value}/valid", this.requestHandler::squareRootWithValidation2Handler)
-                .GET("/functional/math/table/{value}", this.requestHandler::tableHandler) // streaming by default
-                .POST("/functional/math/multiply", this.requestHandler::multiplicationHandler)
+                .path("/functional/math", this::serverResponse)
+                .build();
+    }
+
+    private RouterFunction<ServerResponse> serverResponse() {
+        return RouterFunctions.route()
+                .GET("/square/{value}", this.requestHandler::squareRootHandler)
+                .GET("/square/{value}/valid", this.requestHandler::squareRootWithValidation2Handler)
+                .GET("/table/{value}", this.requestHandler::tableHandler) // streaming by default
+                .POST("/multiply", this.requestHandler::multiplicationHandler)
                 .onError(InvalidInputException.class, ExceptionHandler.handle())
                 .build();
     }
