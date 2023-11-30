@@ -1,6 +1,8 @@
 package com.wbt.webflux101.functional.config;
 
+import com.wbt.webflux101.exception.InvalidInputException;
 import com.wbt.webflux101.functional.RequestHandler;
+import com.wbt.webflux101.functional.error.ExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -20,7 +22,10 @@ public class RouteConfig {
     public RouterFunction<ServerResponse> serverResponse() {
         return RouterFunctions.route()
                 .GET("/functional/math/square/{value}", this.requestHandler::squareRootHandler)
+                .GET("/functional/math/square/{value}/valid", this.requestHandler::squareRootWithValidation2Handler)
                 .GET("/functional/math/table/{value}", this.requestHandler::tableHandler) // streaming by default
+                .POST("/functional/math/multiply", this.requestHandler::multiplicationHandler)
+                .onError(InvalidInputException.class, ExceptionHandler.handle())
                 .build();
     }
 
