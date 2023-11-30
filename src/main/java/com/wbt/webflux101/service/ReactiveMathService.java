@@ -1,5 +1,6 @@
 package com.wbt.webflux101.service;
 
+import com.wbt.webflux101.dto.request.MultiplyRequest;
 import com.wbt.webflux101.dto.response.MathResponse;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -22,6 +23,10 @@ public record ReactiveMathService() {
                 .delayElements(Duration.ofSeconds(1)) // non blocking sleep
                 .map(i -> new MathResponse(LocalDateTime.now(), number * i))
                 .doOnNext(System.out::println);
+    }
+
+    public Mono<MathResponse> multiply(final Mono<MultiplyRequest> request) {
+        return request.map(r -> new MathResponse(LocalDateTime.now(), r.a() * r.b()));
     }
 
 }
