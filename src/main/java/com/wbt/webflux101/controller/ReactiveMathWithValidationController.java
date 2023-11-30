@@ -3,6 +3,7 @@ package com.wbt.webflux101.controller;
 import com.wbt.webflux101.dto.response.MathResponse;
 import com.wbt.webflux101.exception.InvalidInputException;
 import com.wbt.webflux101.service.ReactiveMathService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +28,15 @@ public record ReactiveMathWithValidationController(ReactiveMathService mathServi
                 })
                 .cast(Integer.class)
                 .flatMap(this.mathService::reactiveSquare);
+    }
+
+
+    @GetMapping(path = {"/square/{input}/reactive/throw2"})
+    public Mono<ResponseEntity<MathResponse>> squareReactiveThrow2(final @PathVariable(name = "input") Integer input) {
+        return Mono.fromSupplier(() -> input)
+                .filter(i -> i >= 7 && i <= 15)
+                .flatMap(this.mathService::reactiveSquare)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.badRequest().build());
     }
 }
