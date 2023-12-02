@@ -9,3 +9,4 @@ Hands on spring boot webflux basic for reactive application development
 * Normal controller endpoint
 * Functional endpoint
 * Validation through path
+* WebClient
