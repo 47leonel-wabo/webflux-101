@@ -14,7 +14,7 @@ public class WebClientConfig {
     public WebClient webClient() {
         return WebClient.builder()
                 .baseUrl("http://localhost:8080")
-                .filter(WebClientConfig::sessionToken)
+                .filter(this::sessionToken)
                 .build();
     }
 
